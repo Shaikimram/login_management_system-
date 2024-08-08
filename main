@@ -1,0 +1,147 @@
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+class User {
+private:
+    string name, password;
+
+public:
+    User(string name, string password) {
+        this->name = name;
+        this->password = password;
+    }
+
+    string getusername() {
+        return name;
+    }
+
+    string getpassword() {
+        return password;
+    }
+};
+
+class Usermanager {
+    vector<User> users;
+
+public:
+    void RegisterUser() {
+        string name, password;
+        cout << "please enter your name" << endl;
+        cin >> name;
+        cout << "please enter your password" << endl; // Fixed the prompt
+        cin >> password;
+
+        User newUser(name, password);
+        users.push_back(newUser);
+        cout << "registration successful.................." << endl;
+    }
+
+    bool LoginUser(string name, string password) {
+        for (int i = 0; i < users.size(); i++) {
+            if (users[i].getusername() == name && users[i].getpassword() == password) {
+                cout << "login successful..." << endl;
+                return true;
+            }
+        }
+        cout << "Invalid username or password. Please enter the correct one." << endl;
+        return false;
+    }
+
+    void showuser() {
+        for (int i = 0; i < users.size(); i++) {
+            cout << users[i].getusername() << endl;
+        }
+    }
+
+    void searchuser(string name) {
+        bool found = false;
+        for (int i = 0; i < users.size(); i++) {
+            if (users[i].getusername() == name) {
+                cout << "User found: " << users[i].getusername() << endl;
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            cout << "User not found" << endl;
+        }
+    }
+
+    void Deleteuser(string name) {
+        for (int i = 0; i < users.size(); i++) {
+            if (users[i].getusername() == name) {
+                users.erase(users.begin() + i);
+                cout << "User removed successfully" << endl;
+                return;
+            }
+        }
+        cout << "User not found" << endl; // Handle case where user isn't found
+    }
+};
+
+int main() {
+    Usermanager im;
+    int option;
+    char ty;
+    do {
+        #ifdef _WIN32
+            system("cls");
+        #else
+            system("clear");
+        #endif
+
+        cout << "\t\t select the choice that you want to make" << endl;
+        cout << "\t\t 1. Register user" << endl;
+        cout << "\t\t 2. Login user" << endl;
+        cout << "\t\t 3. Show users" << endl;
+        cout << "\t\t 4. Search user" << endl;
+        cout << "\t\t 5. Delete user" << endl;
+        cout << "\t\t 6. Exit" << endl;
+        cin >> option;
+
+        switch (option) {
+            case 1:
+                im.RegisterUser();
+                break;
+            case 2: {
+                string name, password;
+                cout << "please enter user name: ";
+                cin >> name;
+                cout << "please enter password: ";
+                cin >> password;
+                im.LoginUser(name, password);
+                break;
+            }
+            case 3:
+                im.showuser();
+                break;
+            case 4: {
+                string name;
+                cout << "please enter user name: ";
+                cin >> name;
+                im.searchuser(name);
+                break;
+            }
+            case 5: {
+                string name;
+                cout << "please enter user name: ";
+                cin >> name;
+                im.Deleteuser(name);
+                break;
+            }
+            case 6:
+                exit(0);
+                break;
+            default:
+                cout << "Invalid option. Please select a valid option." << endl;
+                break;
+        }
+
+        cout << "Do you want to continue these operations? Please type [YES/NO]" << endl;
+        cin >> ty;
+    } while (ty == 'y' || ty == 'Y');
+
+    return 0;
+}
